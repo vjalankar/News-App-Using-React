@@ -1,0 +1,19 @@
+{
+    "status": "ok",
+    "totalResults": 1,
+    "articles": [
+        {
+            "source": {
+                "id": "google-news-in",
+                "name": "Google News (India)"
+            },
+            "author": "ANI",
+            "title": "Social worker, Padma Shri awardee Sindhutai Sapkal passes away in Pune",
+            "description": "India News: PUNE: Renowned social worker and Padma Shri recipient Sindhutai Sapkal passed away due to cardiac arrest at a hospital in Pune on Tuesday.",
+            "url": "https://timesofindia.indiatimes.com/india/social-worker-padma-shri-awardee-sindhutai-sapkal-passes-away-in-pune/articleshow/88702951.cms",
+            "urlToImage": "https://static.toiimg.com/thumb/msid-88702944,width-1070,height-580,imgsize-27050,resizemode-75,overlay-toi_sw,pt-32,y_pad-40/photo.jpg",
+            "publishedAt": "2022-01-05T04:02:00+00:00",
+            "content": "Dr. Sindhutai Sapkal will be remembered for her noble service to society. Due to her efforts, many children could l https://t.co/WEkkuGK6Dv\r\n— Narendra Modi (@narendramodi) 1641318673000"
+        }
+    ]
+}
