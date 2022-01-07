@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 export class NewsItem extends Component {
   render() {
-    let { title, description, imageUrl,newsUrl } = this.props;
+    let { title, description, imageUrl, newsUrl } = this.props;
 
     return (
       <div>
@@ -11,23 +11,22 @@ export class NewsItem extends Component {
 
           <img
             src={imageUrl}
-            className="card-img-top img-fluid img-responsive vw-100 vh-100" style={{objectFit:"cover"}}
-           
+            className="card-img-top img-fluid img-responsive" style={{ objectFit: "fill" }}
+
             alt="can not be displayed at this moment "
 
-           
+
           />
           <hr className="text-warning" />
-          
+
           <div className="card-body ">
             <h5 className="card-titl text-primary">{title}...</h5>
 
-            { <hr className="text-primary"/>
-           }
+            {<hr className="text-primary" /> }
             <p className="card-text text-light ">{description}...</p>
-            <hr className="text-light"/>
+            <hr className="text-light" />
 
-           <center> <a
+            <center> <a
               href={newsUrl} target="_blank" rel="noreferrer"
               className="btn btn-outline-primary "
             >
