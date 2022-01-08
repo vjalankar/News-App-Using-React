@@ -2,11 +2,13 @@ import React, { Component } from "react";
 
 export class NewsItem extends Component {
   render() {
-    let { title, description, imageUrl, newsUrl } = this.props;
+    let { title, description, imageUrl, newsUrl,source} = this.props;
 
     return (
       <div>
         <div className="card bg-dark text-light text-justify shadow rounded p-2" >
+          
+          
           {console.title}
 
           <img
@@ -20,10 +22,19 @@ export class NewsItem extends Component {
           <hr className="text-warning" />
 
           <div className="card-body ">
-            <h5 className="card-titl text-primary">{title}...</h5>
 
-            {<hr className="text-primary" /> }
+
+            <h5 className="card-title text-primary">{title}...</h5>   
+
+
+
+            <p className="bg-white shadow p-2 mb-1 ard-text text-right text-black" style={{float:"right"}}> - {source}</p>
+
+      <br />  
+      <br />
+            {<hr className="text-primary mb-3" /> }
             <p className="card-text text-light ">{description}...</p>
+        
             <hr className="text-light" />
 
             <center> <a
