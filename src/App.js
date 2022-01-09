@@ -3,6 +3,7 @@ import Navbar from './Components/Navbar'
 import News from './Components/News'
 import { Routes, Route } from "react-router-dom";
 import LoadingBar from 'react-top-loading-bar'
+import { ReactSession } from 'react-client-session';
 
 export class App extends Component {
   
@@ -14,18 +15,23 @@ export class App extends Component {
   
   state ={
 
-    progress:10
+    progress:0,
+    searchData:null
   }
+
+
   
   
   render() {
 
+    ReactSession.setStoreType("localStorage");
     return (
       <div className="container bg-dark text-light ">
 
-        <Navbar />
+        <Navbar country={"in"} searchData={this.setSearchData}/>
 
         <LoadingBar
+        height={3}
         color='#f11946'
         
         progress={this.state.progress}
@@ -36,7 +42,7 @@ export class App extends Component {
         <br></br>
 
       <Routes>
-          <Route exact path="/" element={<News setProgress={this.setProgress} key="technology" pageSize={3} country={"in"} category={"technology"} />} />
+          <Route exact path="/" element={<News setProgress={this.setProgress} key="technology" pageSize={3} country={"in"} category={"technology"} searchData={this.setSearchData} />} />
 
           <Route exact path="/business" element={<News setProgress={this.setProgress} key="business"  pageSize={3} country={"in"} category={"Business"} />} />
           <Route exact path="/entertainment" element={<News setProgress={this.setProgress} key="entertainment" pageSize={3} country={"in"} category={"entertainment"} />} />

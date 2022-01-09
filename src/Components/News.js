@@ -3,10 +3,15 @@ import NewsItem from "./NewsItem";
 import Spinner from "./Spinner";
 import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { ReactSession } from 'react-client-session';
+
 
 export class News extends Component {
 
- static defaultProps = {
+  
+
+
+  static defaultProps = {
 
     country: "in",
     pageSize: 3,
@@ -20,20 +25,25 @@ export class News extends Component {
     category: PropTypes.string
   }
 
+
   async updateNews(props) {
-    this.props.setProgress(0);
+    let cat=ReactSession.get("categoryValue")
+    console.log(cat)
+    this.props.setProgress(10);
     console.log("component did mount")
-    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=8b5243936cd44668ad04b714bfc28037&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${cat===null?this.props.category:cat}&apiKey=8b5243936cd44668ad04b714bfc28037&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
     this.setState({ loading: true });
     let data = await fetch(url);
+    this.props.setProgress(30)
     let parsedData = await data.json();
     console.log(parsedData)
+    this.props.setProgress(70)
     this.setState({
       articles: parsedData.articles,
       totalResults: parsedData.totalResults,
       loading: false,
-      status:parsedData.status,
-      
+      status: parsedData.status,
+
 
     })
 
@@ -41,19 +51,28 @@ export class News extends Component {
 
   }
 
+  articles = [
+
+
+  ];
+
+  status = [];
 
   async componentDidMount() {
-    
-    if(!this.state.articles.length===0)
-    {
-      this.runThisIfEmptyResponse()
+
+    if (!this.state.articles.length === 0) {
+      //this.runThisIfEmptyResponse()
+
+      return "<h3 class='h3 text-warning '>something went wrong</h3>"
+
     }
-  else{
-    this.updateNews();
-  }
+    else {
+      this.updateNews();
+    }
 
   }
 
+  
 
 
   captialiseFirstLetter = (string) => {
@@ -66,7 +85,7 @@ export class News extends Component {
   NewshandleOnNextCLick = async () => {
     console.log('next button clicked')
     this.setState({ page: this.state.page + 1 })
-    
+
 
   }
 
@@ -79,12 +98,7 @@ export class News extends Component {
 
   }
 
-  articles = [
 
-
-  ];
-
-  status=[];
 
   constructor(props) {
     super(props);
@@ -98,11 +112,7 @@ export class News extends Component {
 
     }
 
-    if(!this.articles){
 
-      alert('sdfsdf')
-
-    }
 
     document.title = `${this.captialiseFirstLetter(this.props.category)}`;
 
@@ -115,25 +125,25 @@ export class News extends Component {
 
     if (this.state.totalResults === 0) {
 
-      console.log("Status is "+this.state.status)
+      console.log("Status is " + this.state.status)
       return <h3 className="h3 text-center text-light">Something went wrong</h3>
 
     }
 
-    else if(this.state.status==="error"){
+    else if (this.state.status === "error") {
       console.log(this.state.status)
-      return <h3 className="h3 text-center text-light">Something went wrong</h3> 
+      return <h3 className="h3 text-center text-light">Something went wrong</h3>
     }
 
-    else{
+    else {
       return <h3 className="h3 text-center text-light">Fetching More News</h3>
-  
+
     }
 
   }
 
-   fetchMoreData = async () => {
-    this.setState({page:this.state.page+1});
+  fetchMoreData = async () => {
+    this.setState({ page: this.state.page + 1 });
     console.log("component did mount")
     const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=8b5243936cd44668ad04b714bfc28037&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
     let data = await fetch(url);
@@ -149,9 +159,9 @@ export class News extends Component {
 
 
 
-   };
- 
- 
+  };
+
+
 
 
 
@@ -162,23 +172,23 @@ export class News extends Component {
         <h2 className="h2 text-warning text-center">Top Headlines from {this.captialiseFirstLetter(this.props.category)}</h2>
 
 
-       
 
 
-         {this.state.loading  && <Spinner />}
-        
+
+        {this.state.loading && <Spinner />}
+
 
         <hr className="text-light" />
         <InfiniteScroll
-            dataLength={this.state.articles.length}
-            next={this.fetchMoreData}
-            hasMore={this.state.articles.length !== this.state.totalResults}
-            loader={<Spinner />}
-          >
+          dataLength={this.state.articles.length}
+          next={this.fetchMoreData}
+          hasMore={this.state.articles.length !== this.state.totalResults}
+          loader={<Spinner />}
+        >
 
 
 
-        <div className="row">
+          <div className="row">
 
 
 
@@ -186,8 +196,7 @@ export class News extends Component {
 
             {this.state.articles.map((element) => {
 
-              if(!this.state.articles)
-              {
+              if (!this.state.articles) {
                 alert('something went wrong please try again')
               }
 
@@ -212,16 +221,16 @@ export class News extends Component {
 
             })}
 
-        
-          
-
-
-        
 
 
 
 
-          {/* <div className="d-flex justify-content-between p-3">
+
+
+
+
+
+            {/* <div className="d-flex justify-content-between p-3">
 
             <button disabled={this.state.page <= 1} className="btn btn-outline-primary" onClick={this.NewshandleOnPrevCLick}> &larr; Previous</button>
 
@@ -235,10 +244,10 @@ export class News extends Component {
 
 
 
-        </div>
+          </div>
 
         </InfiniteScroll >
-        
+
       </div>
     );
   }
