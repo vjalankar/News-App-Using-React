@@ -6,11 +6,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 
 export class News extends Component {
 
- 
-
-
-
-  static defaultProps = {
+ static defaultProps = {
 
     country: "in",
     pageSize: 3,
@@ -24,7 +20,8 @@ export class News extends Component {
     category: PropTypes.string
   }
 
-  async updateNews() {
+  async updateNews(props) {
+    this.props.setProgress(0);
     console.log("component did mount")
     const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=8b5243936cd44668ad04b714bfc28037&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
     this.setState({ loading: true });
@@ -35,16 +32,26 @@ export class News extends Component {
       articles: parsedData.articles,
       totalResults: parsedData.totalResults,
       loading: false,
-
+      status:parsedData.status,
+      
 
     })
 
+    this.props.setProgress(100)
 
   }
 
 
   async componentDidMount() {
-    this.updateNews()
+    
+    if(!this.state.articles.length===0)
+    {
+      this.runThisIfEmptyResponse()
+    }
+  else{
+    this.updateNews();
+  }
+
   }
 
 
@@ -77,14 +84,23 @@ export class News extends Component {
 
   ];
 
+  status=[];
+
   constructor(props) {
     super(props);
     this.state = {
       articles: this.articles,
       loading: false,
       page: 1,
-      totalResults: 0
+      totalResults: 0,
 
+
+
+    }
+
+    if(!this.articles){
+
+      alert('sdfsdf')
 
     }
 
@@ -97,11 +113,21 @@ export class News extends Component {
 
   runThisIfEmptyResponse() {
 
-    if (this.state.totalResults > 0) {
+    if (this.state.totalResults === 0) {
 
-
+      console.log("Status is "+this.state.status)
       return <h3 className="h3 text-center text-light">Something went wrong</h3>
 
+    }
+
+    else if(this.state.status==="error"){
+      console.log(this.state.status)
+      return <h3 className="h3 text-center text-light">Something went wrong</h3> 
+    }
+
+    else{
+      return <h3 className="h3 text-center text-light">Fetching More News</h3>
+  
     }
 
   }
@@ -136,7 +162,10 @@ export class News extends Component {
         <h2 className="h2 text-warning text-center">Top Headlines from {this.captialiseFirstLetter(this.props.category)}</h2>
 
 
-        {this.state.loading &&  <Spinner />}
+       
+
+
+         {this.state.loading  && <Spinner />}
         
 
         <hr className="text-light" />
@@ -152,9 +181,16 @@ export class News extends Component {
         <div className="row">
 
 
-         
+
+
 
             {this.state.articles.map((element) => {
+
+              if(!this.state.articles)
+              {
+                alert('something went wrong please try again')
+              }
+
 
               return (
                 <div className="col-md-4" key={element.url}>
@@ -177,10 +213,7 @@ export class News extends Component {
             })}
 
         
-          {
-            this.runThisIfEmptyResponse()
-
-          }
+          
 
 
         
@@ -203,7 +236,9 @@ export class News extends Component {
 
 
         </div>
-        </InfiniteScroll>
+
+        </InfiniteScroll >
+        
       </div>
     );
   }
