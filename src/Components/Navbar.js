@@ -12,25 +12,25 @@ export class Navbar extends Component {
   
 
 
+
   readData=()=> {
 
-    ReactSession.setStoreType("localStorage");
+    ReactSession.setStoreType("sessionStorage");
     let searchData = document.getElementById("search").value
     if(searchData===null){
       ReactSession.set("categoryValue","")
+      return false;
     
     }
     else{
     ReactSession.set("categoryValue",searchData)
+    return true;
     }
 
   
   }
 
 
-
-  
-  
 
 
 
@@ -91,9 +91,9 @@ export class Navbar extends Component {
 
 
               </ul>
-              <form className="d-flex" >
+              <form className="d-flex" method="get" onSubmit={this.readData} >
                 <input className="form-control me-2" id="search" type="search" placeholder="Search" />
-                <button className="btn btn-outline-success" type="submit" onClick={this.readData}>Search</button>
+                <button className="btn btn-outline-success" type="submit" >Search</button>
               </form>
             </div>
           </div>

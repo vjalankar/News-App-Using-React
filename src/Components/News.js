@@ -31,7 +31,8 @@ export class News extends Component {
     console.log(cat)
     this.props.setProgress(10);
     console.log("component did mount")
-    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${cat===null?this.props.category:cat}&apiKey=8b5243936cd44668ad04b714bfc28037&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${cat===""?this.props.category:cat}&apiKey=8b5243936cd44668ad04b714bfc28037&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+    console.log(url)
     this.setState({ loading: true });
     let data = await fetch(url);
     this.props.setProgress(30)
@@ -58,13 +59,14 @@ export class News extends Component {
 
   status = [];
 
+
   async componentDidMount() {
 
     if (!this.state.articles.length === 0) {
       //this.runThisIfEmptyResponse()
 
       return "<h3 class='h3 text-warning '>something went wrong</h3>"
-
+     
     }
     else {
       this.updateNews();
@@ -72,7 +74,12 @@ export class News extends Component {
 
   }
 
-  
+  componentWillUnmount(){
+
+    ReactSession.set("categoryValue","");
+
+
+  }
 
 
   captialiseFirstLetter = (string) => {
@@ -112,14 +119,19 @@ export class News extends Component {
 
     }
 
+    
+    //  let cat=ReactSession.get("categoryValue");
+
+    document.title = `${
+      
+      
+      
+      this.captialiseFirstLetter(this.setCatValue()===""?this.props.category:this.setCatValue())}`;
 
 
-    document.title = `${this.captialiseFirstLetter(this.props.category)}`;
 
-
-
-  }
-
+  };
+    
 
   runThisIfEmptyResponse() {
 
@@ -142,10 +154,20 @@ export class News extends Component {
 
   }
 
+  setCatValue=()=>{
+
+    let cat=ReactSession.get("categoryValue");
+    return cat;
+   
+  }
+
   fetchMoreData = async () => {
+    let cat=ReactSession.get("categoryValue")
+    console.log(cat)
+   
     this.setState({ page: this.state.page + 1 });
     console.log("component did mount")
-    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${this.props.category}&apiKey=8b5243936cd44668ad04b714bfc28037&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${cat===""?this.props.category:cat}&apiKey=8b5243936cd44668ad04b714bfc28037&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData)
@@ -168,9 +190,12 @@ export class News extends Component {
   render() {
 
     return (
-      <div className="container text-black my-3">
-        <h2 className="h2 text-warning text-center">Top Headlines from {this.captialiseFirstLetter(this.props.category)}</h2>
+      
 
+      <div className="container text-black my-3">
+
+    
+        <h2 className="h2 text-warning text-center">Top Headlines from {this.captialiseFirstLetter(this.setCatValue()===""?this.props.category:this.setCatValue())}</h2>
 
 
 
