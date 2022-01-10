@@ -1,45 +1,36 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Link } from "react-router-dom";
 import { ReactSession } from 'react-client-session'
 
-export class Navbar extends Component {
 
 
 
-  handleChange(event) {
-    this.setState({ value: event.target.value });
+
+
+
+const readData = () => {
+
+  ReactSession.setStoreType("sessionStorage");
+  let searchData = document.getElementById("search").value
+  if (searchData === null) {
+    ReactSession.set("categoryValue", "")
+    return false;
+
+  }
+  else {
+    ReactSession.set("categoryValue", searchData)
+    return true;
   }
 
 
-
-
-  readData = () => {
-
-    ReactSession.setStoreType("sessionStorage");
-    let searchData = document.getElementById("search").value
-    if (searchData === null) {
-      ReactSession.set("categoryValue", "")
-      return false;
-
-    }
-    else {
-      ReactSession.set("categoryValue", searchData)
-      return true;
-    }
-
-
-  }
+}
 
 
 
+const Navbar =(props)=> {
 
-
-  render() {
-
-
-
-    return (
-
+return (
+<>
 
       <div>
 
@@ -91,7 +82,7 @@ export class Navbar extends Component {
 
 
               </ul>
-              <form className="d-flex" method="get" onSubmit={this.readData} >
+              <form className="d-flex" method="get" onSubmit={readData} >
                 <input className="form-control me-2" id="search" type="search" placeholder="Enter category" />
                 <button className="btn btn-outline-success" type="submit" >Search</button>
               </form>
@@ -100,9 +91,9 @@ export class Navbar extends Component {
         </nav>
 
       </div>
-
-    )
-  }
-}
+</>
+    
+  
+)};
 
 export default Navbar
