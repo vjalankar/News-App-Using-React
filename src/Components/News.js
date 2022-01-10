@@ -31,7 +31,7 @@ export class News extends Component {
     console.log(cat)
     this.props.setProgress(10);
     console.log("component did mount")
-    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${cat===""?this.props.category:cat}&apiKey=8b5243936cd44668ad04b714bfc28037&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${cat===""?this.props.category:cat}&apiKey=${this.props.apiKey}&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
     console.log(url)
     this.setState({ loading: true });
     let data = await fetch(url);
@@ -65,8 +65,9 @@ export class News extends Component {
     if (!this.state.articles.length === 0) {
       //this.runThisIfEmptyResponse()
 
-      return "<h3 class='h3 text-warning '>something went wrong</h3>"
      
+      return "<h3 class='h3 text-warning '>something went wrong</h3>"
+      
     }
     else {
       this.updateNews();
@@ -161,13 +162,13 @@ export class News extends Component {
    
   }
 
-  fetchMoreData = async () => {
+  fetchMoreData = async (props) => {
     let cat=ReactSession.get("categoryValue")
     console.log(cat)
    
     this.setState({ page: this.state.page + 1 });
     console.log("component did mount")
-    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${cat===""?this.props.category:cat}&apiKey=8b5243936cd44668ad04b714bfc28037&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${cat===""?this.props.category:cat}&apiKey=${this.props.apiKey}&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData)
