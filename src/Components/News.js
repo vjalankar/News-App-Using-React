@@ -75,6 +75,19 @@ export class News extends Component {
 
   }
 
+  componentDidUpdate()
+  {
+
+    if (this.state.articles.length === 0) {
+      //this.runThisIfEmptyResponse()
+
+     
+      return "<h3 class='h3 text-warning '>something went wrong</h3>"
+      
+    }
+    
+  }
+
   componentWillUnmount(){
 
     ReactSession.set("categoryValue","");
