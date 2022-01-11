@@ -5,10 +5,11 @@ import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ReactSession } from 'react-client-session';
 
-var cat="general";
 
 export class News extends Component {
+
   
+
 
   static defaultProps = {
 
@@ -30,7 +31,7 @@ export class News extends Component {
     console.log(cat)
     this.props.setProgress(10);
     console.log("component did mount")
-    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${cat===""?this.props.category:cat}&apiKey=${this.props.apiKey}&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${cat===undefined?this.props.category:cat}&apiKey=${this.props.apiKey}&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
     console.log(url)
     this.setState({ loading: true });
     let data = await fetch(url);
@@ -43,7 +44,6 @@ export class News extends Component {
       totalResults: parsedData.totalResults,
       loading: false,
       status: parsedData.status,
-      
 
 
     })
@@ -59,14 +59,13 @@ export class News extends Component {
 
   status = [];
 
-  
-
 
   async componentDidMount() {
 
     if (!this.state.articles.length === 0) {
       //this.runThisIfEmptyResponse()
-      alert('hi')
+
+     
       return "<h3 class='h3 text-warning '>something went wrong</h3>"
       
     }
@@ -99,15 +98,8 @@ export class News extends Component {
 
   captialiseFirstLetter = (string) => {
 
-     if(string===null){
-      return "general";
-    }
-    else{ 
-      
-    return  string.charAt(0).toUpperCase() + string.slice(1);
-  
-    }
-}
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
 
 
@@ -136,8 +128,6 @@ export class News extends Component {
       loading: false,
       page: 1,
       totalResults: 0,
-      
-      
 
 
 
@@ -180,8 +170,7 @@ export class News extends Component {
 
   setCatValue=()=>{
 
-    let cat="general";
-    cat=ReactSession.get("categoryValue");
+    let cat=ReactSession.get("categoryValue");
     return cat;
    
   }

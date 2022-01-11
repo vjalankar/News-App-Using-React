@@ -1,39 +1,35 @@
-import React from 'react'
+import React, { Component } from 'react'
 import Navbar from './Components/Navbar'
 import News from './Components/News'
 import { Routes, Route } from "react-router-dom";
 import LoadingBar from 'react-top-loading-bar'
 import { ReactSession } from 'react-client-session';
-const App=() =>{
+export class App extends Component {
 
-const apiKey=process.env.REACT_APP_NEWS_API_KEY
-ReactSession.setStoreType("sessionStorage")
-    
+apiKey=process.env.REACT_APP_NEWS_API_KEY
 
-const setProgress = (progress) => {
 
-    state({ progress: progress })
+  setProgress = (progress) => {
+
+    this.setState({ progress: progress })
 
   }
 
- const state =()=> {
+  state = {
 
-    progress: 0
-  
+    progress: 0,
+    searchData: null
   }
 
 
 
-  
+  render() {
 
+    ReactSession.setStoreType("sessionStorage")
     
 
 
     return (
-
-      
-    
-
       <div className="container bg-dark text-light ">
 
   <Navbar />
@@ -42,23 +38,21 @@ const setProgress = (progress) => {
           height={2}
           color='orange'
 
-          progress={state.progress}
+          progress={this.state.progress}
 
         />
 
 
         <Routes>
+          <Route exact path="/" element={<News setProgress={this.setProgress} apiKey={this.apiKey} key="technology" pageSize={3} country={"in"} category={"technology"} searchData={this.setSearchData} />} />
 
-    
-          <Route exact path="/" element={<News setProgress={setProgress} apiKey={apiKey} key="technology" pageSize={3} country={"in"} category={"technology"}  />} />
-
-          <Route exact path="/business" element={<News setProgress={setProgress} apiKey={apiKey}   key="business" pageSize={3} country={"in"} category={"Business"} />} />
-          <Route exact path="/entertainment" element={<News setProgress={setProgress} apiKey={apiKey} key="entertainment" pageSize={3} country={"in"} category={"entertainment"} />} />
-          <Route exact path="/General" element={<News setProgress={setProgress} apiKey={apiKey} key="general" pageSize={3} country={"in"} category={"general"} />} />
-          <Route exact path="/Health" element={<News setProgress={setProgress} apiKey={apiKey} key="health" pageSize={3} country={"in"} category={"health"} />} />
-          <Route exact path="/Science" element={<News setProgress={setProgress} apiKey={apiKey} key="science" pageSize={3} country={"in"} category={"Science"} />} />
-          <Route exact path="/Sports" element={<News setProgress={setProgress} apiKey={apiKey} key="sports" pageSize={3} country={"in"} category={"sports"} />} />
-          <Route exact path="/Technology" element={<News setProgress={setProgress}apiKey={apiKey}  key="technology" pageSize={3} country={"in"} category={"technology"} />} />
+          <Route exact path="/business" element={<News setProgress={this.setProgress} apiKey={this.apiKey}   key="business" pageSize={3} country={"in"} category={"Business"} />} />
+          <Route exact path="/entertainment" element={<News setProgress={this.setProgress} apiKey={this.apiKey} key="entertainment" pageSize={3} country={"in"} category={"entertainment"} />} />
+          <Route exact path="/General" element={<News setProgress={this.setProgress} apiKey={this.apiKey} key="general" pageSize={3} country={"in"} category={"general"} />} />
+          <Route exact path="/Health" element={<News setProgress={this.setProgress} apiKey={this.apiKey} key="health" pageSize={3} country={"in"} category={"health"} />} />
+          <Route exact path="/Science" element={<News setProgress={this.setProgress} apiKey={this.apiKey} key="science" pageSize={3} country={"in"} category={"Science"} />} />
+          <Route exact path="/Sports" element={<News setProgress={this.setProgress} apiKey={this.apiKey} key="sports" pageSize={3} country={"in"} category={"sports"} />} />
+          <Route exact path="/Technology" element={<News setProgress={this.setProgress}apiKey={this.apiKey}  key="technology" pageSize={3} country={"in"} category={"technology"} />} />
 
 
         </Routes>
@@ -68,8 +62,7 @@ const setProgress = (progress) => {
       </div>
     )
 
-    
-  
+  }
 }
 
 export default App
