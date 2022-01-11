@@ -7,7 +7,8 @@ import { ReactSession } from 'react-client-session';
 const App=() =>{
 
 const apiKey=process.env.REACT_APP_NEWS_API_KEY
-
+ReactSession.setStoreType("sessionStorage")
+    
 
 const setProgress = (progress) => {
 
@@ -15,21 +16,24 @@ const setProgress = (progress) => {
 
   }
 
- const state = {
+ const state =()=> {
 
-    progress: 0,
-    searchData: null
+    progress: 0
+  
   }
 
 
 
   
 
-    ReactSession.setStoreType("sessionStorage")
     
 
 
     return (
+
+      
+    
+
       <div className="container bg-dark text-light ">
 
   <Navbar />
@@ -44,6 +48,8 @@ const setProgress = (progress) => {
 
 
         <Routes>
+
+    
           <Route exact path="/" element={<News setProgress={setProgress} apiKey={apiKey} key="technology" pageSize={3} country={"in"} category={"technology"}  />} />
 
           <Route exact path="/business" element={<News setProgress={setProgress} apiKey={apiKey}   key="business" pageSize={3} country={"in"} category={"Business"} />} />
@@ -62,6 +68,7 @@ const setProgress = (progress) => {
       </div>
     )
 
+    
   
 }
 

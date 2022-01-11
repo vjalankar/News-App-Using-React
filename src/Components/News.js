@@ -1,216 +1,238 @@
-import React, { useEffect,useState } from "react";
-
-
-
+import React, { Component } from "react";
 import NewsItem from "./NewsItem";
 import Spinner from "./Spinner";
 import PropTypes from "prop-types";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { ReactSession } from 'react-client-session';
 
+var cat="general";
 
-const News=(props)=> {
+export class News extends Component {
+  
 
-  const [articles,setArticles]=useState([])
-  const [loading,setLoading]=useState(true)
-  const [page, setpage] = useState(1)
-  const [totalResults, settotalResult] = useState(0)
-  // const [status, setstatus] = useState(true)
+  static defaultProps = {
 
-const updateNews=async (props)=>{
+    country: "in",
+    pageSize: 3,
+    category: "science"
+  }
+
+  static propTypes = {
+
+    country: PropTypes.string,
+    pageSize: PropTypes.number,
+    category: PropTypes.string
+  }
+
+
+  async updateNews(props) {
     let cat=ReactSession.get("categoryValue")
     console.log(cat)
-    props.setProgress(10);
+    this.props.setProgress(10);
     console.log("component did mount")
-    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${cat===""?props.category:cat}&apiKey=${props.apiKey}&page=${page + 1}&pageSize=${props.pageSize}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${cat===""?this.props.category:cat}&apiKey=${this.props.apiKey}&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
     console.log(url)
-    setLoading(true);
+    this.setState({ loading: true });
     let data = await fetch(url);
-    props.setProgress(30)
+    this.props.setProgress(30)
     let parsedData = await data.json();
     console.log(parsedData)
-    props.setProgress(70)
-
-    setArticles(parsedData.articles)
-    settotalResult(parsedData.totalResults)
-    setLoading(false)
-  //  setstatus(true)
-
-    props.setProgress(100)
-
-  }
-
-  // articles = [
-
-
-  // ];
-
-  useEffect(() => {
-
-    if(articles.length===0)
-    {
-
-      alert('API LIMIT EXPIRED TRY AGAIN LATER MAYBE TOMMORRROW')
-      return "<h3 className='h3 text-danger'>something went wrong.API LIMIT EXPIRED TRY AGAIN LATER MAYBE TOMMORRROW</h3>"
+    this.props.setProgress(70)
+    this.setState({
+      articles: parsedData.articles,
+      totalResults: parsedData.totalResults,
+      loading: false,
+      status: parsedData.status,
       
-    }
-    else{
-
-    updateNews()
 
 
-    }
-   
-  return function cleanUp() {
-  ReactSession.set("categoryValue","")
+    })
+
+    this.props.setProgress(100)
+
   }
 
-}); 
+  articles = [
 
 
+  ];
 
-
-  // componentDidUpdate()
-  // {
-
-  //   if (this.state.articles.length === 0) {
-  //     //this.runThisIfEmptyResponse()
-
-     
-  //     return "<h3 class='h3 text-warning '>something went wrong</h3>";
-      
-  //   }
-    
-  // }
-
-  // componentWillUnmount(){
-
-  //   ReactSession.set("categoryValue","")
-
-
-  // }
-
-
- const captialiseFirstLetter = (string) => {
-
-    return string.charAt(0).toUpperCase() + string.slice(1);
-  }
-
-
-
-//  const NewshandleOnNextCLick = async () => {
-//     console.log('next button clicked')
-//     setpage(page + 1 )
-//     updateNews()
-
-
-
-//   }
-
-
-// const  NewshandleOnPrevCLick = async (event) => {
-
-//   setpage(page - 1)  
-//   this.updateNews()
-
-
-//   }
-
-
+  status = [];
 
   
+
+
+  async componentDidMount() {
+
+    if (!this.state.articles.length === 0) {
+      //this.runThisIfEmptyResponse()
+      alert('hi')
+      return "<h3 class='h3 text-warning '>something went wrong</h3>"
+      
+    }
+    else {
+      this.updateNews();
+    }
+
+  }
+
+  componentDidUpdate()
+  {
+
+    if (this.state.articles.length === 0) {
+      //this.runThisIfEmptyResponse()
+
+     
+      return "<h3 class='h3 text-warning '>something went wrong</h3>"
+      
+    }
+    
+  }
+
+  componentWillUnmount(){
+
+    ReactSession.set("categoryValue","");
+
+
+  }
+
+
+  captialiseFirstLetter = (string) => {
+
+     if(string===null){
+      return "general";
+    }
+    else{ 
+      
+    return  string.charAt(0).toUpperCase() + string.slice(1);
+  
+    }
+}
+
+
+
+  NewshandleOnNextCLick = async () => {
+    console.log('next button clicked')
+    this.setState({ page: this.state.page + 1 })
+
+
+  }
+
+
+  NewshandleOnPrevCLick = async (event) => {
+
+    this.setState({ page: this.state.page - 1 });
+    this.updateNews()
+
+
+  }
+
+
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      articles: this.articles,
+      loading: false,
+      page: 1,
+      totalResults: 0,
+      
+      
+
+
+
+    }
 
     
     //  let cat=ReactSession.get("categoryValue");
 
-  //   document.title = `${
-  //    this.captialiseFirstLetter(this.setCatValue()===""?props.category:this.setCatValue())}`;
+    document.title = `${
+      
+      
+      
+      this.captialiseFirstLetter(this.setCatValue()===undefined?this.props.category:this.setCatValue())}`;
 
 
 
-  // };
+  };
     
 
-  // const runThisIfEmptyResponse=()=> {
+  runThisIfEmptyResponse() {
 
-  //   if (totalResults === 0) {
+    if (this.state.totalResults === 0) {
 
-  //     console.log("Status is " + status)
-  //     return <h3 className="h3 text-center text-light">Something went wrong</h3>
+      console.log("Status is " + this.state.status)
+      return <h3 className="h3 text-center text-light">Something went wrong</h3>
 
-  //   }
+    }
 
-  //   else if (status === "error") {
-  //     console.log(status)
-  //     return <h3 className="h3 text-center text-light">Something went wrong</h3>
-  //   }
+    else if (this.state.status === "error") {
+      console.log(this.state.status)
+      return <h3 className="h3 text-center text-light">Something went wrong</h3>
+    }
 
-  //   else {
-  //     return <h3 className="h3 text-center text-light">Fetching More News</h3>
+    else {
+      return <h3 className="h3 text-center text-light">Fetching More News</h3>
 
-  //   }
+    }
 
-  // }
+  }
 
- 
+  setCatValue=()=>{
 
-const  fetchMoreData = async (props) => {
+    let cat="general";
+    cat=ReactSession.get("categoryValue");
+    return cat;
+   
+  }
+
+  fetchMoreData = async (props) => {
     let cat=ReactSession.get("categoryValue")
     console.log(cat)
    
-    setpage(page+1)
-    //this.setState({ page: this.state.page + 1 });
+    this.setState({ page: this.state.page + 1 });
     console.log("component did mount")
-    const url = `https://newsapi.org/v2/top-headlines?country=${props.country}&category=${cat===""?props.category:cat}&apiKey=${props.apiKey}&page=${page + 1}&pageSize=${props.pageSize}`;
+    const url = `https://newsapi.org/v2/top-headlines?country=${this.props.country}&category=${cat===""?this.props.category:cat}&apiKey=${this.props.apiKey}&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
     console.log(parsedData)
-    setArticles(articles.concat(parsedData.articles))
-    settotalResult(parsedData.totalResults)
-    setLoading(true)
-    // this.setState({
-    //   articles: articles.concat(parsedData.articles),
-    //   totalResults: parsedData.totalResults,
-    //   loading: false,
+    this.setState({
+      articles: this.state.articles.concat(parsedData.articles),
+      totalResults: parsedData.totalResults,
+      loading: false,
 
 
-    // })
+    })
 
 
 
   };
 
 
-  
-  const setCatValue=()=>{
-
-    let cat=ReactSession.get("categoryValue");
-    return cat;
-   
-  }
 
 
 
- 
+  render() {
+
     return (
-      <>
+      
 
       <div className="container text-black my-3">
 
     
-        <h2 className="h2 text-warning text-center">Top Headlines from {captialiseFirstLetter(setCatValue()===""?props.category:setCatValue())}</h2>
+        <h2 className="h2 text-warning text-center">Top Headlines from {this.captialiseFirstLetter(this.setCatValue()===undefined?this.props.category:this.setCatValue())}</h2>
 
 
 
 
-        {loading && <Spinner />}
+        {this.state.loading && <Spinner />}
 
 
         <hr className="text-light" />
         <InfiniteScroll
-          dataLength={articles.length}
-          next={fetchMoreData}
-          hasMore={articles.length !== totalResults}
+          dataLength={this.state.articles.length}
+          next={this.fetchMoreData}
+          hasMore={this.state.articles.length !== this.state.totalResults}
           loader={<Spinner />}
         >
 
@@ -222,9 +244,9 @@ const  fetchMoreData = async (props) => {
 
 
 
-            {articles.map((element) => {
+            {this.state.articles.map((element) => {
 
-              if (!articles) {
+              if (!this.state.articles) {
                 alert('something went wrong please try again')
               }
 
@@ -262,7 +284,7 @@ const  fetchMoreData = async (props) => {
 
             <button disabled={this.state.page <= 1} className="btn btn-outline-primary" onClick={this.NewshandleOnPrevCLick}> &larr; Previous</button>
 
-            <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / props.pageSize)} className="btn btn-outline-warning" onClick={this.NewshandleOnNextCLick}> Next &rarr;</button>
+            <button disabled={this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize)} className="btn btn-outline-warning" onClick={this.NewshandleOnNextCLick}> Next &rarr;</button>
 
 
           </div> */}
@@ -277,26 +299,8 @@ const  fetchMoreData = async (props) => {
         </InfiniteScroll >
 
       </div>
-      </>
     );
-  
+  }
 }
-
-News.defaultProps = {
-
-  country: "in",
-  pageSize: 3,
-  category: "science"
-}
-
-News.propTypes = {
-
-  country: PropTypes.string,
-  pageSize: PropTypes.number,
-  category: PropTypes.string
-}
-
-
-
 
 export default News;
