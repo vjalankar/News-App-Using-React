@@ -12,7 +12,7 @@ const readData = () => {
 
   ReactSession.setStoreType("sessionStorage");
   let searchData = document.getElementById("search").value
-  if (searchData === null) {
+  if (searchData === undefined) {
     ReactSession.set("categoryValue", "")
     return false;
 
